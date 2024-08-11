@@ -17,7 +17,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
- * <--------------- health check endpoint ------------------>
+//  * <--------------- health check endpoint ------------------>
 app.get("/health", (req:Request, res:Response) => {
   res.send({
     message:'health okay'
