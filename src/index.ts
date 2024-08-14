@@ -4,6 +4,16 @@ import cors from "cors";
 import { userRoutes } from "./routes/user.routes";
 import { connectToDb } from "./db/connectToDb";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import { v2 as cloudinary } from "cloudinary";
+import { myRestaurantRoutes } from "./routes/myRestaurant.routes";
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 
 const app = express();
 
@@ -18,13 +28,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //  * <--------------- health check endpoint ------------------>
-app.get("/health", (req:Request, res:Response) => {
+app.get("/health", (req: Request, res: Response) => {
   res.send({
-    message:'health okay'
-  })
-})
+    message: "health okay",
+  });
+});
 
 app.use("/api/my/user", userRoutes);
+app.use("/api/my/restaurant", myRestaurantRoutes);
+
 
 app.use(errorMiddleware);
 Promise.all([connectToDb()])
