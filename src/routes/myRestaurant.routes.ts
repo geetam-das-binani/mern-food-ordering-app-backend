@@ -18,16 +18,13 @@ router
     upload.single("imageFile"),
     validateRestaurant(restaurantValidationSchema),
     createMyRestaurant
-  );
-router.route("/").get(
-  jwtCheck,
-  jwtParse,
+  )
+  .get(
+    jwtCheck,
+    jwtParse,
 
-  getMyRestaurant
-);
-
-router
-  .route("/")
+    getMyRestaurant
+  )
   .put(
     jwtCheck,
     jwtParse,

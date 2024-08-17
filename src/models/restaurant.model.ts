@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { MenuItemType, RestaurantType } from "../types/user.types";
+import { MenuItemType, RestaurantType } from "../types/types";
 
 const menuItemsSchema = new Schema<MenuItemType>(
   {

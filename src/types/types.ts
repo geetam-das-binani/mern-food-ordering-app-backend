@@ -23,3 +23,11 @@ export type RestaurantType = {
   menuItems: Array<MenuItemType>;
   user: string;
 };
+export type SearchResponseType={
+  data:Array<RestaurantType>;
+  pagination:{
+    total:number,
+    page:number,
+    totalPages:number
+  }
+}

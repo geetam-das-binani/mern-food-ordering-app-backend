@@ -1,5 +1,6 @@
 //! implement zod validation afterwards for protected routes
 
+
 import { z } from "zod";
 const updateUserDetailsValidationSchema = z.object({
   name: z
@@ -57,4 +58,5 @@ const restaurantValidationSchema = z.object({
     .nonempty({ message: "At least one menu item is required" }),
 });
 
-export { updateUserDetailsValidationSchema, restaurantValidationSchema };
+
+export { updateUserDetailsValidationSchema, restaurantValidationSchema};

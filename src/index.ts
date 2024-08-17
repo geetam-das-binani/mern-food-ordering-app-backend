@@ -6,6 +6,7 @@ import { connectToDb } from "./db/connectToDb";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { v2 as cloudinary } from "cloudinary";
 import { myRestaurantRoutes } from "./routes/myRestaurant.routes";
+import { restaurantRoutes } from "./routes/restaurant.routes";
 
 
 cloudinary.config({
@@ -36,6 +37,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.use("/api/my/user", userRoutes);
 app.use("/api/my/restaurant", myRestaurantRoutes);
+app.use("/api/restaurant", restaurantRoutes);
 
 
 app.use(errorMiddleware);
