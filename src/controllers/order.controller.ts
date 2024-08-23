@@ -159,6 +159,7 @@ const stripeWebHookHanlder = catchAsyncErrors(
         STRIPE_ENDPOINT_SECRET as string
       );
     } catch (err: any) {
+      console.log(`⚠️  Webhook signature verification failed.`, err.message);
       return next(new ErrorHandler(`Webhook Error: ${err.message}`, 400));
     }
    

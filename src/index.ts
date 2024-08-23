@@ -24,9 +24,9 @@ app.use(
   })
 );
 
-app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
+
+app.use("/api/order/checkout/webhook", express.raw({ type:"application/json" }));
 
 app.use(express.json());
 
@@ -43,6 +43,7 @@ app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/order", orderRoute);
 
 app.use(errorMiddleware);
+
 Promise.all([connectToDb()])
   .then(() => {
     console.log("Connected to database");
