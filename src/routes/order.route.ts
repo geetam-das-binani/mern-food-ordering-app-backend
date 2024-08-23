@@ -2,7 +2,7 @@ import express from "express";
 import { jwtCheck, jwtParse } from "../middlewares/auth";
 import {
   createCheckOutSession,
-  stripeWebHookHanlder,
+  // stripeWebHookHanlder,
 } from "../controllers/order.controller";
 
 const router = express.Router();
@@ -14,6 +14,6 @@ router.post(
   jwtParse,
   createCheckOutSession
 );
-router.post("/checkout/webhook", stripeWebHookHanlder);
+// router.post("/checkout/webhook", stripeWebHookHanlder);
 
 export { router as orderRoute };
