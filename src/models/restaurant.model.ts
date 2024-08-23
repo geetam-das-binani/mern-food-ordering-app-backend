@@ -1,8 +1,13 @@
-import { Schema, model } from "mongoose";
-import { MenuItemType, RestaurantType } from "../types/types";
+import mongoose, { InferSchemaType, Schema, model } from "mongoose";
+import { RestaurantType } from "../types/types";
 
-const menuItemsSchema = new Schema<MenuItemType>(
+const menuItemsSchema = new Schema(
   {
+    _id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      default: () => new mongoose.Types.ObjectId(),
+    },
     name: {
       type: String,
       required: true,
@@ -14,6 +19,7 @@ const menuItemsSchema = new Schema<MenuItemType>(
   },
   { timestamps: true }
 );
+export type MenuItemsType = InferSchemaType<typeof menuItemsSchema>;
 
 const restaurantSchema = new Schema(
   {

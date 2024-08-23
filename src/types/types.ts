@@ -1,3 +1,5 @@
+import { MenuItemsType } from "../models/restaurant.model";
+
 export type UserType = {
   name: string;
   email: string;
@@ -7,10 +9,7 @@ export type UserType = {
   authOId: string;
 };
 
-export type MenuItemType = {
-  name: string;
-  price: number;
-};
+
 export type RestaurantType = {
   restaurantName: string;
   city: string;
@@ -20,7 +19,7 @@ export type RestaurantType = {
   cuisines: Array<string>;
   imageUrl: string;
   lastUpdated: Date;
-  menuItems: Array<MenuItemType>;
+  menuItems: Array<MenuItemsType>;
   user: string;
 };
 export type SearchResponseType={

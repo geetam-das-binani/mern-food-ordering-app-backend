@@ -7,14 +7,13 @@ import { errorMiddleware } from "./middlewares/error.middleware";
 import { v2 as cloudinary } from "cloudinary";
 import { myRestaurantRoutes } from "./routes/myRestaurant.routes";
 import { restaurantRoutes } from "./routes/restaurant.routes";
-
+import { orderRoute } from "./routes/order.route";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
 
 const app = express();
 
@@ -25,8 +24,11 @@ app.use(
   })
 );
 
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/order/checkout/webhook", express.raw({ type: "*/*" }));
+
+app.use(express.json());
 
 //  * <--------------- health check endpoint ------------------>
 app.get("/health", (req: Request, res: Response) => {
@@ -38,7 +40,7 @@ app.get("/health", (req: Request, res: Response) => {
 app.use("/api/my/user", userRoutes);
 app.use("/api/my/restaurant", myRestaurantRoutes);
 app.use("/api/restaurant", restaurantRoutes);
-
+app.use("/api/order", orderRoute);
 
 app.use(errorMiddleware);
 Promise.all([connectToDb()])

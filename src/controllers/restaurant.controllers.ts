@@ -91,8 +91,19 @@ const updateMyRestaurant = catchAsyncErrors(
     return res.status(200).json(restaurant);
   }
 );
-
-export { createMyRestaurant, getMyRestaurant, updateMyRestaurant };
+const getMyRestaurantById = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.userId;
+    const restaurant = await RestaurantModel.findOne({
+     
+      _id: req.params.restaurantId,
+    });
+    if (!restaurant) {
+      return next(new ErrorHandler("Restaurant not found", 404));
+    }
+    return res.status(200).json(restaurant);
+  }
+);
 
 //* utility function
 async function uploadImageToCloudinary(image: Express.Multer.File) {
@@ -107,3 +118,10 @@ async function uploadImageToCloudinary(image: Express.Multer.File) {
     return null;
   }
 }
+
+export {
+  createMyRestaurant,
+  getMyRestaurant,
+  updateMyRestaurant,
+  getMyRestaurantById,
+};

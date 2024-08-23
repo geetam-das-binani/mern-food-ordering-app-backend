@@ -5,11 +5,13 @@ import {
   createMyRestaurant,
   getMyRestaurant,
   updateMyRestaurant,
+  getMyRestaurantById
 } from "../controllers/restaurant.controllers";
 import { validateRestaurant } from "../middlewares/validate";
 import { restaurantValidationSchema } from "../middlewares/validation";
 const router = express.Router();
 
+router.get("/:restaurantId", getMyRestaurantById); 
 router
   .route("/")
   .post(
@@ -22,8 +24,7 @@ router
   .get(
     jwtCheck,
     jwtParse,
-
-    getMyRestaurant
+   getMyRestaurant
   )
   .put(
     jwtCheck,
@@ -32,5 +33,6 @@ router
     validateRestaurant(restaurantValidationSchema),
     updateMyRestaurant
   );
+
 
 export { router as myRestaurantRoutes };
