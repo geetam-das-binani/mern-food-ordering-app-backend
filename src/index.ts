@@ -8,7 +8,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { myRestaurantRoutes } from "./routes/myRestaurant.routes";
 import { restaurantRoutes } from "./routes/restaurant.routes";
 import { orderRoute } from "./routes/order.route";
-import { stripeWebHookHanlder } from "./controllers/order.controller";
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -25,9 +25,10 @@ app.use(
   })
 );
 
-
-
-app.use("/api/order/checkout/webhook", express.raw({ type:"application/json" }),stripeWebHookHanlder);
+app.use(
+  "/api/order/checkout/webhook",
+  express.raw({ type: "application/json" })
+);
 
 app.use(express.json());
 

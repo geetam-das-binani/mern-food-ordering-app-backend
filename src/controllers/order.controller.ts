@@ -152,6 +152,9 @@ const stripeWebHookHanlder = catchAsyncErrors(
 
     let event;
 
+    console.log(sig);
+    console.log(req.body);
+    
     try {
       event = STRIPE.webhooks.constructEvent(
         req.body,
