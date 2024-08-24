@@ -157,7 +157,7 @@ const stripeWebHookHanlder = catchAsyncErrors(
       event = STRIPE.webhooks.constructEvent(
         req.body,
         sig as string,
-        STRIPE_ENDPOINT_SECRET as string
+        "whsec_ZQoGcGHb9br43sUlFgpXdPHZ7YPxZoY0"
       );
     } catch (err: any) {
       console.log(`⚠️  Webhook signature verification failed.`, err.message);
