@@ -10,7 +10,7 @@ const STRIPE = new Stripe(process.env.STRIPE_API_SECRET_KEY as string);
 
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 
-const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
+const STRIPE_ENDPOINT_SECRET = (process.env.STRIPE_WEBHOOK_SECRET as string).trim();
 
 type CheckOutSessionrequest = {
   cartItems: Array<{
@@ -157,7 +157,7 @@ const stripeWebHookHanlder = catchAsyncErrors(
       event = STRIPE.webhooks.constructEvent(
         req.body,
         sig as string,
-        "whsec_ZQoGcGHb9br43sUlFgpXdPHZ7YPxZoY0"
+        STRIPE_ENDPOINT_SECRET
       );
     } catch (err: any) {
       console.log(`⚠️  Webhook signature verification failed.`, err.message);
