@@ -141,7 +141,6 @@ async function createSession(
       deliveryPrice: deliveryPrice.toString(),
     },
     billing_address_collection: "required",
-    
   };
   return await STRIPE.checkout.sessions.create(sessionData);
 }
@@ -152,9 +151,8 @@ const stripeWebHookHanlder = catchAsyncErrors(
 
     let event;
 
-    console.log(sig);
-    console.log(req.body);
-    
+
+
     try {
       event = STRIPE.webhooks.constructEvent(
         req.body,
@@ -163,10 +161,9 @@ const stripeWebHookHanlder = catchAsyncErrors(
       );
     } catch (err: any) {
       console.log(`⚠️  Webhook signature verification failed.`, err.message);
-      return next(new ErrorHandler(`Webhook Error: ${err.message}`, 400));
+      return res.status(400).send(`Webhook error ${err.message}.`);
     }
-   
-    
+
     if (event.type === "checkout.session.completed") {
       const order = await OrderModel.findById(
         event.data.object.metadata?.orderId
@@ -174,7 +171,7 @@ const stripeWebHookHanlder = catchAsyncErrors(
       if (!order) {
         return next(new ErrorHandler("Order not found", 404));
       }
-      order.totalAmount = Number(event.data.object.amount_total)/100;
+      order.totalAmount = Number(event.data.object.amount_total) / 100;
       order.status = "Paid";
 
       await order.save();
