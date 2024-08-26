@@ -25,6 +25,8 @@ app.use(
   })
 );
 
+//! for signature verification stripe needs the raw body not the formatted json body so we are using raw 👇⬇️
+
 app.use(
   "/api/order/checkout/webhook",
   express.raw({ type: "application/json" }),

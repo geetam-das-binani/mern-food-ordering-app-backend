@@ -10,7 +10,11 @@ const STRIPE = new Stripe(process.env.STRIPE_API_SECRET_KEY as string);
 
 const FRONTEND_URL = process.env.FRONTEND_URL as string;
 
-const STRIPE_ENDPOINT_SECRET = (process.env.STRIPE_WEBHOOK_SECRET as string).trim();
+//! after deploying on render for removing unnecessary whitespace otherwise signature verificaton would fail repeatedly 👇❌
+
+const STRIPE_ENDPOINT_SECRET = (
+  process.env.STRIPE_WEBHOOK_SECRET as string
+).trim();
 
 type CheckOutSessionrequest = {
   cartItems: Array<{
@@ -151,8 +155,6 @@ const stripeWebHookHanlder = catchAsyncErrors(
 
     let event;
 
-
-
     try {
       event = STRIPE.webhooks.constructEvent(
         req.body,
@@ -180,4 +182,17 @@ const stripeWebHookHanlder = catchAsyncErrors(
   }
 );
 
-export { createCheckOutSession, stripeWebHookHanlder };
+const getMyOrders = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const orders = await OrderModel.find({ user: req.userId })
+      .populate("restaurant")
+      .populate("user");
+
+    if (!orders || orders.length === 0) {
+      return next(new ErrorHandler("Order not found", 404));
+    }
+    return res.status(200).json(orders);
+  }
+);
+
+export { createCheckOutSession, stripeWebHookHanlder, getMyOrders };

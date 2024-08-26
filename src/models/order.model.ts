@@ -1,4 +1,7 @@
-import { Schema, model } from "mongoose";
+import { InferSchemaType, Schema, model } from "mongoose";
+
+
+
 const orderSchema = new Schema(
   {
     restaurant: {
@@ -26,10 +29,10 @@ const orderSchema = new Schema(
         type: String,
         required: true,
       },
-      country:{
+      country: {
         type: String,
         required: true,
-      }
+      },
     },
     cartItems: [
       {
@@ -57,13 +60,13 @@ const orderSchema = new Schema(
       enum: [
         "Order Placed",
         "Paid",
-        "InProgress",
-        "OutForDelivery",
+        "In Progress",
+        "Out For Delivery",
         "Delivered",
-      ],
+      ]
     },
   },
   { timestamps: true }
 );
-
-export const OrderModel= model("Order", orderSchema);
+type Order = InferSchemaType<typeof orderSchema>;
+export const OrderModel = model<Order>("Order", orderSchema);
