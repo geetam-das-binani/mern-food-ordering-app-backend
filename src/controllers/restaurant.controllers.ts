@@ -4,6 +4,7 @@ import { RestaurantModel } from "../models/restaurant.model";
 import { v2 as cloudinary } from "cloudinary";
 import { ErrorHandler } from "../utils/error";
 import mongoose from "mongoose";
+import { OrderModel } from "../models/order.model";
 
 const createMyRestaurant = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -93,9 +94,7 @@ const updateMyRestaurant = catchAsyncErrors(
 );
 const getMyRestaurantById = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.userId;
     const restaurant = await RestaurantModel.findOne({
-     
       _id: req.params.restaurantId,
     });
     if (!restaurant) {
@@ -119,9 +118,55 @@ async function uploadImageToCloudinary(image: Express.Multer.File) {
   }
 }
 
+const getMyRestaurantOrders = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.userId;
+    console.log(userId, "2");
+    const restaurant = await RestaurantModel.findOne({ user: userId });
+    console.log(restaurant);
+    if (!restaurant) {
+      return next(new ErrorHandler("Restaurant not found", 404));
+    }
+    const orders = await OrderModel.find({ restaurant: restaurant._id })
+      .populate("user")
+      .populate("restaurant");
+    console.log(orders);
+
+    return res.status(200).json(orders);
+  }
+);
+
+const updateOrderStatus = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const order = await OrderModel.findById(orderId);
+    if (!order) {
+      return next(new ErrorHandler("Order not found", 404));
+    }
+    const restaurant = await RestaurantModel.findOne({
+      _id: order.restaurant,
+      user: req.userId,
+    });
+    if (!restaurant) {
+      return next(new ErrorHandler("Restaurant not found", 404));
+    }
+    if (
+      order.restaurant !== restaurant._id ||
+      restaurant.user.toString() !== req.userId
+    ) {
+      return next(new ErrorHandler("Unauthorized access", 401));
+    }
+    order.status = status;
+    await order.save();
+    return res.status(200).json(order);
+  }
+);
 export {
   createMyRestaurant,
   getMyRestaurant,
   updateMyRestaurant,
   getMyRestaurantById,
+  getMyRestaurantOrders,
+  updateOrderStatus,
 };

@@ -5,11 +5,17 @@ import {
   createMyRestaurant,
   getMyRestaurant,
   updateMyRestaurant,
-  getMyRestaurantById
+  getMyRestaurantById,
+  getMyRestaurantOrders,
+  updateOrderStatus
 } from "../controllers/restaurant.controllers";
 import { validateRestaurant } from "../middlewares/validate";
 import { restaurantValidationSchema } from "../middlewares/validation";
 const router = express.Router();
+
+router.get("/my-orders",jwtCheck,jwtParse,getMyRestaurantOrders)
+
+router.patch("/order/:orderId/status",jwtCheck,jwtParse,updateOrderStatus)
 
 router.get("/:restaurantId", getMyRestaurantById); 
 router

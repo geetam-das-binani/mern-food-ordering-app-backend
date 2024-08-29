@@ -19,7 +19,7 @@ const createCurrentUser = catchAsyncErrors(
     return res.status(201).json(newUser);
   }
 );
-
+ 
 const updateUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const { city, name, addressLine1, country } = req.body;

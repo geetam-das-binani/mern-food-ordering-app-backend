@@ -3,6 +3,9 @@ import { auth } from "express-oauth2-jwt-bearer";
 import { ErrorHandler } from "../utils/error";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.models";
+import { ObjectId } from "mongoose";
+
+
 
 declare global {
   namespace Express {
@@ -25,6 +28,7 @@ export const jwtParse = async (
   next: NextFunction
 ) => {
   const { authorization } = req.headers;
+  
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return next(new ErrorHandler("Unauthorized", 401));
   }
@@ -41,9 +45,11 @@ export const jwtParse = async (
       return next(new ErrorHandler("user not found", 404));
     }
     req.authOId = authOId as string;
-    req.userId = user._id.toString();
-    next();
+    req.userId = user._id.toString();  
+    
+   
   } catch (error) {
     return next(new ErrorHandler("Unauthorized", 401));
   }
 };
+ 

@@ -7,7 +7,7 @@ import { errorMiddleware } from "./middlewares/error.middleware";
 import { v2 as cloudinary } from "cloudinary";
 import { myRestaurantRoutes } from "./routes/myRestaurant.routes";
 import { restaurantRoutes } from "./routes/restaurant.routes";
-import { orderRoute } from "./routes/order.route";
+import { orderRoute } from "./routes/order.routes";
 import { stripeWebHookHanlder } from "./controllers/order.controller";
 
 cloudinary.config({
