@@ -149,7 +149,7 @@ async function createSession(
   return await STRIPE.checkout.sessions.create(sessionData);
 }
 
-const stripeWebHookHanlder = catchAsyncErrors(
+const stripeWebHookHandler = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const sig = req.headers["stripe-signature"];
 
@@ -195,4 +195,4 @@ const getMyOrders = catchAsyncErrors(
   }
 );
 
-export { createCheckOutSession, stripeWebHookHanlder, getMyOrders };
+export { createCheckOutSession, stripeWebHookHandler, getMyOrders };

@@ -1,9 +1,14 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { UserType } from "../types/types";
 
 const userSchema = new Schema(
   {
-    authOId: {
+    _id: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      default: () => new mongoose.Types.ObjectId(),
+    },
+    password: {
       type: String,
       required: true,
     },
@@ -11,8 +16,9 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-    name: {
+    username: {
       type: String,
+      required: true,
     },
     addressLine1: {
       type: String,
@@ -23,6 +29,8 @@ const userSchema = new Schema(
     country: {
       type: String,
     },
+    refreshToken: String,
+    refreshTokenExpiry: Date,
   },
   { timestamps: true }
 );

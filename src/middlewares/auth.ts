@@ -16,11 +16,11 @@ declare global {
   }
 }
 
-export const jwtCheck = auth({
-  audience: process.env.audience,
-  issuerBaseURL: process.env.issuerBaseURL,
-  tokenSigningAlg: process.env.tokenSigningAlg,
-});
+// export const jwtCheck = auth({
+//   audience: process.env.audience,
+//   issuerBaseURL: process.env.issuerBaseURL,
+//   tokenSigningAlg: process.env.tokenSigningAlg,
+// });
 
 export const jwtParse = async (
   req: Request,
@@ -46,7 +46,7 @@ export const jwtParse = async (
     }
     req.authOId = authOId as string;
     req.userId = user._id.toString();  
-    
+    next()
    
   } catch (error) {
     return next(new ErrorHandler("Unauthorized", 401));

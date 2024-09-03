@@ -4,20 +4,20 @@ import {
   updateUser,
   getUser,
 } from "../controllers/user.controllers";
-import { jwtCheck, jwtParse } from "../middlewares/auth";
-import { validateUpdateUserDetails } from "../middlewares/validate";
-import { updateUserDetailsValidationSchema } from "../middlewares/validation";
-
+import { jwtParse } from "../middlewares/auth";
+import { validateCreateUserDetails, validateUpdateUserDetails } from "../middlewares/validate";
+import { createUserValidationSchema, updateUserDetailsValidationSchema } from "../middlewares/validation";
+import upload from '../upload/multer'
 const router = express.Router();
-router.route("/").post(jwtCheck, createCurrentUser);
+
 router
   .route("/")
   .put(
-    jwtCheck,
     jwtParse,
     validateUpdateUserDetails(updateUserDetailsValidationSchema),
     updateUser
   )
-  .get(jwtCheck, jwtParse, getUser);
+  .get(jwtParse, getUser)
+  .post(upload.single("avatar"),validateCreateUserDetails(createUserValidationSchema),createCurrentUser);
 
 export { router as userRoutes };

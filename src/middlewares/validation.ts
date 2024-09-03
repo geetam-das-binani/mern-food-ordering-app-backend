@@ -1,6 +1,5 @@
 //! implement zod validation afterwards for protected routes
-
-
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/;
 import { z } from "zod";
 const updateUserDetailsValidationSchema = z.object({
   name: z
@@ -26,7 +25,6 @@ const menuItemSchema = z.object({
     })
     .min(1, "Price must be at least 1"),
 });
-
 
 const restaurantValidationSchema = z.object({
   restaurantName: z
@@ -57,6 +55,23 @@ const restaurantValidationSchema = z.object({
     .array(menuItemSchema)
     .nonempty({ message: "At least one menu item is required" }),
 });
+const createUserValidationSchema = z.object({
+  username: z
+    .string({ required_error: "username is required" })
+    .min(5, { message: "username must be at least 5 characters long" }),
+  email: z
+    .string({ required_error: "email is required" })
+    .email({ message: "invalid email" }),
+  password: z
+    .string({ required_error: "password is required" })
+    .min(5, { message: "password must be at least 5 characters long" })
+    .refine((data) => passwordRegex.test(data), {
+      message: `Atleast one lowercase, uppercase, digit, special character needed`,
+    }),
+});
 
-
-export { updateUserDetailsValidationSchema, restaurantValidationSchema};
+export {
+  createUserValidationSchema,
+  updateUserDetailsValidationSchema,
+  restaurantValidationSchema,
+};

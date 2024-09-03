@@ -121,16 +121,16 @@ async function uploadImageToCloudinary(image: Express.Multer.File) {
 const getMyRestaurantOrders = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.userId;
-    console.log(userId, "2");
+   
     const restaurant = await RestaurantModel.findOne({ user: userId });
-    console.log(restaurant);
+    
     if (!restaurant) {
       return next(new ErrorHandler("Restaurant not found", 404));
     }
     const orders = await OrderModel.find({ restaurant: restaurant._id })
       .populate("user")
       .populate("restaurant");
-    console.log(orders);
+
 
     return res.status(200).json(orders);
   }
@@ -152,7 +152,7 @@ const updateOrderStatus = catchAsyncErrors(
       return next(new ErrorHandler("Restaurant not found", 404));
     }
     if (
-      order.restaurant !== restaurant._id ||
+     
       restaurant.user.toString() !== req.userId
     ) {
       return next(new ErrorHandler("Unauthorized access", 401));

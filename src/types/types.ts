@@ -1,14 +1,16 @@
 import { MenuItemsType } from "../models/restaurant.model";
 
 export type UserType = {
-  name: string;
+  username: string;
   email: string;
   addressLine1: string;
   city: string;
   country: string;
-  authOId: string;
+  password: string;
+  _id: string;
+  refreshToken: string,
+  refreshTokenExpiry: Date,
 };
-
 
 export type RestaurantType = {
   restaurantName: string;
@@ -22,11 +24,11 @@ export type RestaurantType = {
   menuItems: Array<MenuItemsType>;
   user: string;
 };
-export type SearchResponseType={
-  data:Array<RestaurantType>;
-  pagination:{
-    total:number,
-    page:number,
-    totalPages:number
-  }
-}
+export type SearchResponseType = {
+  data: Array<RestaurantType>;
+  pagination: {
+    total: number;
+    page: number;
+    totalPages: number;
+  };
+};
