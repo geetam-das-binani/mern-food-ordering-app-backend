@@ -5,20 +5,19 @@ import { ErrorHandler } from "../utils/error";
 import { v2 as cloudinary } from "cloudinary";
 import { setToken } from "../utils/sendTokenViaCookies";
 import { generateTokens } from "../utils/generateToken";
-
+import bcrypt from 'bcryptjs';
 const createCurrentUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
       // TODO  send token via cookies  and return response to frontend
       const { accessToken, refreshToken } = await generateTokens(existingUser);
-      await User.findByIdAndUpdate(existingUser._id, {
-        $set: {
-          refreshToken,
-          refreshTokenExpiry: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        },
-      });
-      setToken(existingUser,res, accessToken, refreshToken);
+      existingUser.refreshToken = refreshToken;
+      existingUser.refreshTokenExpiry = new Date(
+        Date.now() + 7 * 24 * 60 * 60 * 1000
+      );
+      await existingUser.save();
+      setToken(existingUser, res, accessToken, refreshToken);
     }
     const avatarFile = req.file as Express.Multer.File;
     const uploadResponse = await uploadImageToCloudinary(avatarFile);
@@ -31,22 +30,23 @@ const createCurrentUser = catchAsyncErrors(
         new ErrorHandler("Failed to upload image to cloudinary", 400)
       );
     }
+    
 
     const newUser = new User({
       ...req.body,
-
+      password: bcrypt.hashSync(req.body.password,10),
       avatar: uploadResponse.secure_url,
     });
     const { accessToken, refreshToken } = await generateTokens(newUser);
     newUser.refreshToken = refreshToken;
-
     newUser.refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
     await newUser.save();
-    setToken(newUser,res, accessToken, refreshToken);
     if (!newUser) {
       return next(new ErrorHandler("Error while creating user", 500));
     }
-    return res.status(201).json(newUser);
+    setToken(newUser, res, accessToken, refreshToken);
+    
   }
 );
 
